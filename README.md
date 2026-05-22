@@ -26,9 +26,17 @@ This repo provides a straightforward cleanup helper for those cases.
 3. Deletes the WAL and SHM transaction log files from the Capability Access Manager database folder
 4. Restarts the `camsvc` service
 
+## Download
+
+If you only need the cleanup script, download `bloat.bat` directly from the GitHub release:
+
+- https://github.com/apokaliptics/CapabilityAccessManager-cleanup/releases/tag/v1.0.0
+
+The release contains only the single `bloat.bat` file.
+
 ## Usage
 
-1. Clone this repository:
+1. Download `bloat.bat` from the release or clone this repository:
 
 ```powershell
 git clone https://github.com/apokaliptics/CapabilityAccessManager-cleanup.git
