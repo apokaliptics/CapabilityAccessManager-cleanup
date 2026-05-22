@@ -2,72 +2,49 @@
 
 ## Overview
 
-`CapabilityAccessManager-cleanup` is a repository for improving, refactoring, and documenting the Capability Access Manager workflow. The goal is to centralize access configuration, clean up capability handling logic, and create an easy-to-use setup for teams that manage permissions and access levels across applications.
+`CapabilityAccessManager-cleanup` is a small utility repository for immediately cleaning up a bloated or corrupted Windows Capability Access Manager installation.
 
-## Purpose
+The included `bloat.bat` script stops the `Capability Access Manager` service, removes temporary transaction log files that can cause the service to inflate or fail, and restarts the service.
 
-This repository is intended to house:
+## Why this exists
 
-- a clean, maintainable implementation of Capability Access Manager functionality
-- documentation for installation and usage
-- contribution guidelines for ongoing cleanup and enhancement
-- automated tests and workflows to protect access management logic
+Windows may accumulate stale or corrupted Capability Access Manager database logs in:
 
-## What belongs here
+- `C:\ProgramData\Microsoft\Windows\CapabilityAccessManager\CapabilityAccessManager.db-wal`
+- `C:\ProgramData\Microsoft\Windows\CapabilityAccessManager\CapabilityAccessManager.db-shm`
 
-Use this repo for:
+This repo provides a straightforward cleanup helper for those cases.
 
-- capability access management code and utilities
-- access policy definitions
-- cleanup scripts for stale or redundant capability configuration
-- integration examples for application environments
-- documentation and developer guides
+## Included script
 
-## Repository structure
+- `bloat.bat` — cleans up the Capability Access Manager temporary logs and restarts the service.
 
-Currently this repository is empty, but a good structure for future files would be:
+### What `bloat.bat` does
 
-- `src/` — core implementation logic
-- `docs/` — architecture, usage guides, and policy references
-- `tests/` — automated unit and integration tests
-- `scripts/` — cleanup or migration helpers
-- `README.md` — repository-level documentation
+1. Verifies the script is running with Administrator privileges
+2. Stops the `camsvc` service
+3. Deletes the WAL and SHM transaction log files from the Capability Access Manager database folder
+4. Restarts the `camsvc` service
 
-## Getting Started
+## Usage
 
-1. Clone the repository:
+1. Clone this repository:
 
-```bash
+```powershell
 git clone https://github.com/apokaliptics/CapabilityAccessManager-cleanup.git
 cd CapabilityAccessManager-cleanup
 ```
 
-2. Add your project files under `src/`, `tests/`, and `docs/`.
+2. Run the cleanup script as Administrator:
 
-3. Update this `README.md` with the actual implementation details and usage information.
+```powershell
+.\bloat.bat
+```
 
-## Recommended Workflow
+If the script is not run with elevated privileges, it will prompt you to rerun it as Administrator.
 
-- Keep access rules and capability definitions declarative and versioned.
-- Consolidate cleanup logic into reusable scripts.
-- Use automated tests to verify permission behavior before changes are merged.
-- Document the runtime expectations and environment variables clearly.
+## Notes
 
-## Contribution Guidelines
-
-Anyone contributing to this repository should:
-
-- open an issue first for large changes or cleanup tasks
-- follow coding standards and formatting for the chosen language
-- add tests for any bug fixes or new functionality
-- update documentation when behavior changes
-
-## Next Steps
-
-- Add the first implementation files for capability access management
-- Define the data model or API for capability permissions
-- Add a `CONTRIBUTING.md` and tests once the repository contains code
-
-## License
-
-Add a license file to define the project license. A common choice is `MIT`, but choose whichever license matches your needs.
+- This repository is intentionally lightweight and focused on cleanup.
+- Use this only when `Capability Access Manager` is malfunctioning or its temporary database logs need removal.
+- Do not delete files from the Capability Access Manager folder unless you understand the risk and have a backup.
